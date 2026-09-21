@@ -1,12 +1,16 @@
-import express from 'express';
+import path from 'node:path';
 
-const app = express();
-const port = Number(process.env.PORT ?? 3001);
+import { startServer } from './server';
 
-app.get('/api/health', (_req, res) => {
-  res.json({ ok: true });
-});
+const PORT = Number(process.env.PORT ?? 3001);
+const webDist = path.resolve(import.meta.dirname, '../../web/dist');
 
-app.listen(port, () => {
-  console.log(`server listening on port ${port}`);
-});
+const started = await startServer({ port: PORT, webDist });
+console.log(`server listening on port ${started.port}`);
+
+const shutdown = (): void => {
+  void started.close().then(() => process.exit(0));
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

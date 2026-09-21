@@ -143,6 +143,10 @@ export class ElevatorSystem extends EventEmitter<SystemEvents> {
     return this.eventLog.recent();
   }
 
+  getConfig(): SimulationConfig {
+    return this.config;
+  }
+
   private getElevator(id: number): Elevator {
     const elevator = this.elevators.find((e) => e.id === id);
     if (!elevator) throw new DomainError(`unknown elevator ${id}`);
