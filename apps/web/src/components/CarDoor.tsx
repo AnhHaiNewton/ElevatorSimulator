@@ -30,7 +30,8 @@ function CarDoor({ floor, elevator, doorTransitionMs, speed, onSelectFloor }: Ca
         .join(' ')}
       style={{ ['--door-transition-ms' as string]: `${transitionMs}ms` }}
       disabled={disabled}
-      aria-label={`Elevator ${elevator.id}: go to floor ${floor}`}
+      aria-pressed={isSelected}
+      aria-label={`Elevator ${elevator.id}: go to floor ${floor}${isSelected ? ' (selected)' : ''}`}
       onClick={() => onSelectFloor(elevator.id, floor)}
     >
       <span className="car-door-panel left" />

@@ -7,6 +7,7 @@
   --accent: #2563eb;
   --lit: #2563eb;
   --danger: #dc2626;
+  --selected: #16a34a;
   --border: #d1d5db;
 }
 
@@ -188,7 +189,24 @@ main {
 }
 
 .car-door.selected {
-  background: #fef9c3;
+  background: var(--selected);
+  border-color: var(--selected);
+}
+
+.car-door.selected .car-door-number {
+  color: #fff;
+}
+
+.car-door.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 1px;
+  right: 3px;
+  z-index: 2;
+  font-size: 0.6rem;
+  line-height: 1;
+  color: #fff;
+  font-weight: 700;
 }
 
 .car-door-number {
