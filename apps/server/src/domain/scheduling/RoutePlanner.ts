@@ -15,7 +15,8 @@ export class RoutePlanner {
 
   /** Should the elevator stop (and open doors) at route.floor given its heading? */
   static shouldStop(route: RouteState): boolean {
-    const hasRequestsBeyond = route.heading !== 'idle' && RoutePlanner.hasRequestsBeyond(route, route.heading);
+    const hasRequestsBeyond =
+      route.heading !== 'idle' && RoutePlanner.hasRequestsBeyond(route, route.heading);
     const ctx: StopContext = { floor: route.floor, heading: route.heading, hasRequestsBeyond };
     return RoutePlanner.requests(route).some((r) => r.shouldStopAt(ctx));
   }

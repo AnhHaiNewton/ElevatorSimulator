@@ -20,12 +20,7 @@ function CarDoor({ floor, elevator, doorTransitionMs, speed, onSelectFloor }: Ca
   return (
     <button
       type="button"
-      className={[
-        'car-door',
-        isCurrent && 'current',
-        isOpen && 'open',
-        isSelected && 'selected',
-      ]
+      className={['car-door', isCurrent && 'current', isOpen && 'open', isSelected && 'selected']
         .filter(Boolean)
         .join(' ')}
       style={{ ['--door-transition-ms' as string]: `${transitionMs}ms` }}

@@ -39,7 +39,8 @@ export class EtaEstimator {
 
       const move = RoutePlanner.nextHeading({ floor, heading, carCalls, hallCalls });
       if (move === 'idle') {
-        const pendingHere = carCalls.some((c) => c.floor === floor) || hallCalls.some((h) => h.floor === floor);
+        const pendingHere =
+          carCalls.some((c) => c.floor === floor) || hallCalls.some((h) => h.floor === floor);
         if (pendingHere) continue; // doors reopen here for the other direction
         return Number.POSITIVE_INFINITY; // defensive, should not happen
       }

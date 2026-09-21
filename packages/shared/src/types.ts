@@ -25,7 +25,10 @@ export interface MetricsDto {
 }
 
 export interface SystemSnapshot {
-  config: Pick<SimulationConfig, 'floors' | 'elevatorCount' | 'floorTravelMs' | 'doorTransitionMs' | 'doorDwellMs'>;
+  config: Pick<
+    SimulationConfig,
+    'floors' | 'elevatorCount' | 'floorTravelMs' | 'doorTransitionMs' | 'doorDwellMs'
+  >;
   simTimeMs: number;
   strategy: string;
   elevators: ElevatorSnapshot[];

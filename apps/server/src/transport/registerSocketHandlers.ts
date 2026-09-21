@@ -1,9 +1,4 @@
-import type {
-  AckResponse,
-  ClientToServerEvents,
-  ServerToClientEvents,
-  StatePayload,
-} from '@elevator/shared';
+import type { AckResponse, ClientToServerEvents, ServerToClientEvents, StatePayload } from '@elevator/shared';
 import {
   carCallSchema,
   doorCommandSchema,
