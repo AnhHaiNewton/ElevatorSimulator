@@ -201,8 +201,7 @@ distance (penalized if it's moving away). It's cheap and intuitive, but blind to
 committed to_. [`EtaCostStrategy`](apps/server/src/domain/dispatch/EtaCostStrategy.ts) instead runs
 [`EtaEstimator`](apps/server/src/domain/scheduling/EtaEstimator.ts), which **replays the elevator's actual
 future route** — using the exact same `RoutePlanner` rules the real elevator obeys — with the new call
-appended, and returns the simulated time until its doors would open for that call. A small
-`stopPenaltyMs × (pending stops)` term on top spreads load across elevators with similar ETAs.
+appended, and returns the simulated time until its doors would open for that call.
 
 The headline example: elevator **A** is at floor 3, already moving up with three car calls ahead (4, 5, 6);
 elevator **B** is idle at floor 1. A hall call arrives at floor 7 (▲).
@@ -210,6 +209,20 @@ elevator **B** is idle at floor 1. A hall call arrives at floor 7 (▲).
 - **Raw distance:** A is 4 floors away, B is 6 — nearest-car picks **A**.
 - **Reality:** A has to serve 4, 5 and 6 first (three more door cycles) before it can even continue toward
   7; B can go there directly. ETA-based costing picks **B**, and it's the one that actually arrives first.
+
+**Pricing in collateral delay.** A raw ETA number isn't the whole story either: an elevator already mid-route
+can look artificially cheap for a *new* call simply because it happens to be passing by right now — while the
+LOOK rules mean it would have to skip straight past a hall call it already promised (something is still
+"beyond" it in its travel direction), badly delaying that other passenger. `EtaCostStrategy` also measures,
+for every hall call the candidate elevator already holds, how much *extra* wait this new assignment would
+add to it (`estimateMs` with vs. without the new call in the mix) and prices that straight into the cost,
+on top of a small flat `stopPenaltyMs × (pending stops)` term. Concretely: 3 idle elevators sit at floor 10;
+hall calls arrive at floors 3, then 2, then 1 (▲ each), a few seconds apart. Elevator 1 takes the call at 3
+and starts down. Elevator 2 takes 2. By the time the call at 1 arrives, elevator 1 — now mid-flight and
+close to the bottom — has a *lower raw ETA* to floor 1 than idle elevator 3 has, purely from having a head
+start. But serving it would force elevator 1 to sail past its own floor-3 passenger (adding roughly a full
+door cycle's worth of delay, ~5s, to their wait) — so it's priced accordingly, and idle elevator 3 correctly
+wins instead. All three elevators end up used, exactly as they should.
 
 Two extra rules keep the dispatcher honest without needing continuous re-dispatch:
 
