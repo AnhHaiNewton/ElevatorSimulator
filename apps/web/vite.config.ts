@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
@@ -9,9 +9,5 @@ export default defineConfig({
       '/socket.io': { target: 'http://localhost:3001', ws: true },
       '/api': 'http://localhost:3001',
     },
-  },
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test-setup.ts'],
   },
 });
